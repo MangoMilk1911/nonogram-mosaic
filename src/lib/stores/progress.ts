@@ -37,8 +37,12 @@ export async function markComplete(puzzleId: string): Promise<void> {
       : { completed: [...current.completed, puzzleId] };
     return next;
   });
-  const dir = await appLocalDataDir();
-  await mkdir(dir, { recursive: true });
-  const path = await join(dir, PROGRESS_FILE);
-  await writeTextFile(path, JSON.stringify(next));
+  try {
+    const dir = await appLocalDataDir();
+    await mkdir(dir, { recursive: true });
+    const path = await progressFilePath();
+    await writeTextFile(path, JSON.stringify(next));
+  } catch (error) {
+    console.warn("Failed to save progress:", error);
+  }
 }
