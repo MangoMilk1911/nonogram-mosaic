@@ -1,0 +1,16 @@
+{
+  "id": "ch1",
+  "title": "Chapter 1: Heart",
+  "mosaicSize": { "rows": 3, "cols": 3 },
+  "tiles": [
+    "ch1-p1",
+    "ch1-p2",
+    "ch1-p3",
+    "ch1-p4",
+    "ch1-p5",
+    "ch1-p6",
+    "ch1-p7",
+    "ch1-p8",
+    "ch1-p9"
+  ]
+}

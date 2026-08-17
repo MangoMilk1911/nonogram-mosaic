@@ -1,0 +1,16 @@
+{
+  "id": "ch3",
+  "title": "Chapter 3: Flower",
+  "mosaicSize": { "rows": 3, "cols": 3 },
+  "tiles": [
+    "ch3-p1",
+    "ch3-p2",
+    "ch3-p3",
+    "ch3-p4",
+    "ch3-p5",
+    "ch3-p6",
+    "ch3-p7",
+    "ch3-p8",
+    "ch3-p9"
+  ]
+}

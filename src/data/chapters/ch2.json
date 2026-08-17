@@ -1,0 +1,16 @@
+{
+  "id": "ch2",
+  "title": "Chapter 2: Star",
+  "mosaicSize": { "rows": 3, "cols": 3 },
+  "tiles": [
+    "ch2-p1",
+    "ch2-p2",
+    "ch2-p3",
+    "ch2-p4",
+    "ch2-p5",
+    "ch2-p6",
+    "ch2-p7",
+    "ch2-p8",
+    "ch2-p9"
+  ]
+}
