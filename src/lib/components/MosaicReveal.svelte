@@ -3,6 +3,7 @@
   import { chapters } from "../../data/chapters";
   import { puzzles } from "../../data/puzzles";
   import { activeChapterId, currentView } from "../stores/view";
+  import { tileHue } from "../nonogram/hue";
   import MosaicTile from "./MosaicTile.svelte";
 
   const chapter = chapters.find((c) => c.id === $activeChapterId)!;
@@ -24,7 +25,7 @@
   <div class="full-mosaic">
     {#each chapter.tiles as tileId, i (tileId)}
       <div class="reveal-tile" style="animation-delay: {i * 120}ms">
-        <MosaicTile solution={puzzles[tileId].solution} label={i + 1} cellSize={8} />
+        <MosaicTile solution={puzzles[tileId].solution} label={i + 1} hue={tileHue(i)} cellSize={8} />
       </div>
     {/each}
   </div>
@@ -36,13 +37,16 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
-    gap: 1.5rem;
+    min-height: calc(100vh - 6rem);
+    gap: 1.75rem;
   }
   .full-mosaic {
     display: grid;
-    grid-template-columns: repeat(3, auto);
-    gap: 4px;
+    grid-template-columns: repeat(3, max-content);
+    gap: 6px;
+    background: var(--lead);
+    padding: 6px;
+    border-radius: 8px;
   }
   .reveal-tile {
     opacity: 0;

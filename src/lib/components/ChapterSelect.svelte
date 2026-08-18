@@ -4,6 +4,7 @@
   import { progress } from "../stores/progress";
   import { currentView, activePuzzleId, activeChapterId } from "../stores/view";
   import { isChapterComplete, isChapterUnlocked } from "../nonogram/chapterStatus";
+  import { tileHue } from "../nonogram/hue";
   import MosaicTile from "./MosaicTile.svelte";
 
   // Initialized from the shared store (not null) so that returning here
@@ -34,78 +35,131 @@
   }
 </script>
 
-{#if selectedChapter}
-  <div class="puzzle-list">
-    <button class="back-button" on:click={backToChapters}>&larr; Chapters</button>
-    <h2>{selectedChapter.title}</h2>
-    <div class="puzzle-grid">
-      {#each selectedChapter.tiles as tileId, i (tileId)}
-        <button class="puzzle-button" on:click={() => openPuzzle(tileId)}>
-          {$progress.completed.includes(tileId) ? `✓ ${i + 1}` : i + 1}
+<div class="screen">
+  {#if selectedChapter}
+    <div class="puzzle-list">
+      <button class="back-button" on:click={backToChapters}>&larr; Chapters</button>
+      <h2>{selectedChapter.title}</h2>
+      <div class="puzzle-grid">
+        {#each selectedChapter.tiles as tileId, i (tileId)}
+          {@const done = $progress.completed.includes(tileId)}
+          <button class="puzzle-button" class:done on:click={() => openPuzzle(tileId)}>
+            {done ? `✓ ${i + 1}` : i + 1}
+          </button>
+        {/each}
+      </div>
+    </div>
+  {:else}
+    <div class="chapter-grid">
+      {#each chapters as chapter, index (chapter.id)}
+        {@const unlocked = isChapterUnlocked(index, chapters, $progress.completed)}
+        {@const complete = isChapterComplete(chapter, $progress.completed)}
+        <button
+          class="chapter-card"
+          class:locked={!unlocked}
+          disabled={!unlocked}
+          on:click={() => openChapter(chapter.id, unlocked)}
+        >
+          <div class="mosaic-grid">
+            {#each chapter.tiles as tileId, i (tileId)}
+              <MosaicTile
+                solution={$progress.completed.includes(tileId) ? puzzles[tileId].solution : null}
+                label={i + 1}
+                hue={tileHue(i)}
+                cellSize={6}
+              />
+            {/each}
+          </div>
+          <span class="chapter-title">{chapter.title}{complete ? " ✓" : ""}</span>
         </button>
       {/each}
     </div>
-  </div>
-{:else}
-  <div class="chapter-grid">
-    {#each chapters as chapter, index (chapter.id)}
-      {@const unlocked = isChapterUnlocked(index, chapters, $progress.completed)}
-      {@const complete = isChapterComplete(chapter, $progress.completed)}
-      <button
-        class="chapter-card"
-        class:locked={!unlocked}
-        disabled={!unlocked}
-        on:click={() => openChapter(chapter.id, unlocked)}
-      >
-        <div class="mosaic-grid">
-          {#each chapter.tiles as tileId, i (tileId)}
-            <MosaicTile
-              solution={$progress.completed.includes(tileId) ? puzzles[tileId].solution : null}
-              label={i + 1}
-              cellSize={6}
-            />
-          {/each}
-        </div>
-        <span>{chapter.title}{complete ? " ✓" : ""}</span>
-      </button>
-    {/each}
-  </div>
-{/if}
+  {/if}
+</div>
 
 <style>
+  .screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 6rem);
+    padding: 1.5rem 1.75rem;
+  }
   .chapter-grid,
   .puzzle-grid {
     display: grid;
     grid-template-columns: repeat(3, auto);
     gap: 1.5rem;
-    padding: 1.5rem;
   }
   .chapter-card {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem;
-    border: 1px solid #ccc;
-    background: white;
+    gap: 0.85rem;
+    padding: 1.25rem;
+    border: 1px solid var(--hair);
+    border-radius: var(--radius-lg);
+    background: var(--panel);
+    box-shadow: var(--shadow-sm);
     cursor: pointer;
   }
+  .chapter-card:not(.locked):hover {
+    box-shadow: var(--shadow-md);
+  }
   .chapter-card.locked {
-    opacity: 0.5;
+    opacity: 0.55;
     cursor: not-allowed;
+  }
+  .chapter-title {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--ink);
   }
   .mosaic-grid {
     display: grid;
-    grid-template-columns: repeat(3, auto);
+    grid-template-columns: repeat(3, max-content);
     gap: 2px;
-    width: 6rem;
+    background: var(--lead);
+    padding: 2px;
+    border-radius: 4px;
   }
   .puzzle-button {
-    width: 3rem;
-    height: 3rem;
+    width: 3.25rem;
+    height: 3.25rem;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--ink);
+    background: var(--panel);
+    border: 1px solid var(--hair);
+    border-radius: var(--radius-md);
     cursor: pointer;
   }
+  .puzzle-button:hover {
+    background: var(--hollow);
+  }
+  .puzzle-button.done {
+    background: var(--teal);
+    border-color: var(--teal);
+    color: #fff;
+  }
   .back-button {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--muted);
+    background: none;
+    border: none;
+    padding: 0;
+    margin-bottom: 0.75rem;
     cursor: pointer;
+  }
+  .back-button:hover {
+    color: var(--ink);
+  }
+  .puzzle-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 </style>

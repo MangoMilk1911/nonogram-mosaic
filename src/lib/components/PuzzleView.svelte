@@ -79,6 +79,7 @@
   <button class="back-button" on:click={backToList}>&larr; Back</button>
   <div
     class="grid-wrapper"
+    class:solved
     style="grid-template-columns: max-content repeat({puzzle.size.cols}, 2rem); grid-template-rows: max-content repeat({puzzle.size.rows}, 2rem);"
   >
     <div class="corner"></div>
@@ -109,20 +110,36 @@
 </div>
 
 <style>
+  .puzzle-view {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: calc(100vh - 6rem);
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1.75rem 1.75rem;
+  }
   .grid-wrapper {
     display: grid;
-    gap: 1px;
-    background: #ccc;
+    gap: 3px;
+    background: var(--lead);
+    padding: 3px;
+    border-radius: 4px;
     width: max-content;
-    margin: 1rem;
+    margin: 0.5rem 0;
     user-select: none;
   }
   .cell {
-    background: white;
+    background: var(--hollow);
+    border-radius: 1px;
     cursor: pointer;
   }
   .cell.filled {
-    background: #2b2b2b;
+    background: var(--cobalt);
+    transition: background 0.3s ease;
+  }
+  .grid-wrapper.solved .cell.filled {
+    background: var(--teal);
   }
   .cell.marked::before {
     content: "×";
@@ -130,37 +147,58 @@
     align-items: center;
     justify-content: center;
     height: 100%;
-    color: #999;
+    color: var(--muted);
+    font-weight: 700;
+  }
+  .col-clue,
+  .row-clue,
+  .corner {
+    background: var(--panel);
   }
   .col-clue {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-end;
-    font-size: 0.75rem;
-    background: white;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: var(--ink);
+    padding-bottom: 3px;
   }
   .row-clue {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: flex-end;
-    gap: 2px;
-    font-size: 0.75rem;
-    background: white;
-    padding-right: 4px;
+    gap: 4px;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: var(--ink);
+    padding-right: 6px;
+    border-radius: 1px;
   }
   .col-clue.done,
   .row-clue.done {
-    color: #bbb;
+    color: var(--muted);
   }
   .solved-banner {
-    margin: 1rem;
+    font-family: var(--font-heading);
+    font-weight: 700;
     font-size: 1.5rem;
-    font-weight: 600;
+    color: var(--teal);
   }
   .back-button {
-    margin: 1rem;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--muted);
+    background: none;
+    border: none;
+    padding: 0;
     cursor: pointer;
+  }
+  .back-button:hover {
+    color: var(--ink);
   }
 </style>

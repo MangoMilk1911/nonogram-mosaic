@@ -1,6 +1,9 @@
 <script lang="ts">
+  import type { Hue } from "../nonogram/hue";
+
   export let solution: number[][] | null;
   export let label: number;
+  export let hue: Hue = "cobalt";
   export let cellSize = 4;
 </script>
 
@@ -12,7 +15,7 @@
     >
       {#each solution as row}
         {#each row as cell}
-          <div class="tile-cell" class:filled={cell === 1}></div>
+          <div class="tile-cell" style={cell === 1 ? `background: var(--${hue});` : ""}></div>
         {/each}
       {/each}
     </div>
@@ -26,19 +29,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #f0ede6;
-    border: 1px solid #d8d2c4;
+    background: var(--hollow);
     aspect-ratio: 1;
   }
   .mosaic-tile.placeholder {
-    color: #a89f8c;
+    color: var(--muted);
+    font-family: var(--font-heading);
     font-weight: 600;
   }
   .tile-grid {
     display: grid;
-  }
-  .tile-cell.filled {
-    background: #2b2b2b;
   }
   .tile-number {
     font-size: 1.1rem;
