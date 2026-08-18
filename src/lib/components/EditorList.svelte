@@ -9,8 +9,8 @@
   ];
 
   let showNewPuzzleForm = false;
-  let customRows = 8;
-  let customCols = 8;
+  let customRows: number | null = 8;
+  let customCols: number | null = 8;
 
   function openNewPuzzleForm() {
     showNewPuzzleForm = true;
@@ -20,9 +20,11 @@
     showNewPuzzleForm = false;
   }
 
-  function startNewPuzzle(rows: number, cols: number) {
+  const clamp = (n: number | null) => Math.min(20, Math.max(3, Math.round(Number(n) || 8)));
+
+  function startNewPuzzle(rows: number | null, cols: number | null) {
     activeEditorPuzzleId.set(null);
-    editorGridSize.set({ rows, cols });
+    editorGridSize.set({ rows: clamp(rows), cols: clamp(cols) });
     currentView.set("editor");
   }
 
