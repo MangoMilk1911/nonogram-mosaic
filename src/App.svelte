@@ -2,16 +2,20 @@
   import { onMount } from "svelte";
   import { currentView } from "./lib/stores/view";
   import { loadProgress } from "./lib/stores/progress";
+  import { loadCustomPuzzles } from "./lib/stores/customPuzzles";
   import { dark, initTheme, toggleTheme } from "./lib/stores/theme";
   import TitleScreen from "./lib/components/TitleScreen.svelte";
   import ChapterSelect from "./lib/components/ChapterSelect.svelte";
   import PuzzleView from "./lib/components/PuzzleView.svelte";
   import MosaicReveal from "./lib/components/MosaicReveal.svelte";
+  import EditorList from "./lib/components/EditorList.svelte";
+  import PuzzleEditor from "./lib/components/PuzzleEditor.svelte";
   import Mark from "./lib/components/Mark.svelte";
 
   onMount(() => {
     initTheme();
     void loadProgress();
+    void loadCustomPuzzles();
   });
 
   function goHome() {
@@ -38,6 +42,10 @@
       <PuzzleView />
     {:else if $currentView === "mosaicReveal"}
       <MosaicReveal />
+    {:else if $currentView === "editorList"}
+      <EditorList />
+    {:else if $currentView === "editor"}
+      <PuzzleEditor />
     {/if}
   </main>
 </div>
