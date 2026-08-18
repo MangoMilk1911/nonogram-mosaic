@@ -7,8 +7,10 @@
   import { checkWin } from "../nonogram/winCheck";
   import { isChapterComplete } from "../nonogram/chapterStatus";
   import type { CellState } from "../nonogram/types";
+  import { customPuzzles } from "../stores/customPuzzles";
 
-  const puzzle = puzzles[$activePuzzleId as string];
+  const puzzle = puzzles[$activePuzzleId as string] ?? $customPuzzles.find((p) => p.id === $activePuzzleId);
+  const isCustom = !(($activePuzzleId as string) in puzzles);
   const rowClues = deriveRowClues(puzzle.solution);
   const colClues = deriveColClues(puzzle.solution);
 
@@ -54,12 +56,18 @@
     if (solved) return;
     if (checkWin(cells, puzzle.solution)) {
       solved = true;
-      await markComplete(puzzle.id);
+      if (!isCustom) {
+        await markComplete(puzzle.id);
+      }
       setTimeout(finishPuzzle, 1200);
     }
   }
 
   function finishPuzzle() {
+    if (isCustom) {
+      currentView.set("editorList");
+      return;
+    }
     const chapter = chapters.find((c) => c.id === $activeChapterId);
     if (chapter && isChapterComplete(chapter, $progress.completed)) {
       currentView.set("mosaicReveal");
@@ -69,7 +77,7 @@
   }
 
   function backToList() {
-    currentView.set("chapterSelect");
+    currentView.set(isCustom ? "editorList" : "chapterSelect");
   }
 </script>
 

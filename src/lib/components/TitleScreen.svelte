@@ -5,13 +5,20 @@
   function play() {
     currentView.set("chapterSelect");
   }
+
+  function create() {
+    currentView.set("editorList");
+  }
 </script>
 
 <div class="title-screen">
   <Mark size={40} />
   <h1>nonogram mosaic</h1>
   <p class="tagline">Stained glass, built one solved puzzle at a time.</p>
-  <button class="play-button" on:click={play}>Play</button>
+  <div class="title-actions">
+    <button class="play-button" on:click={play}>Play</button>
+    <button class="create-button" on:click={create}>Create</button>
+  </div>
 </div>
 
 <style>
@@ -32,8 +39,12 @@
     color: var(--muted);
     font-size: 1.05rem;
   }
-  .play-button {
+  .title-actions {
+    display: flex;
+    gap: 0.75rem;
     margin-top: 0.75rem;
+  }
+  .play-button {
     font-family: var(--font-heading);
     font-weight: 700;
     font-size: 1.1rem;
@@ -46,5 +57,19 @@
   }
   .play-button:hover {
     background: var(--ruby);
+  }
+  .create-button {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--ink);
+    background: transparent;
+    border: 1px solid var(--hair);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 2.25rem;
+    cursor: pointer;
+  }
+  .create-button:hover {
+    background: var(--hollow);
   }
 </style>

@@ -7,6 +7,14 @@ export interface Puzzle {
   solution: number[][];
 }
 
+export interface CustomPuzzle {
+  id: string;
+  title: string;
+  size: { rows: number; cols: number };
+  solution: number[][];
+  createdAt: string;
+}
+
 export interface Chapter {
   id: string;
   title: string;
